@@ -16,10 +16,13 @@ def delete_job(id):
     db_sess = db_session.create_session()
     if db_sess.query(Jobs.id).filter_by(id=id).scalar() is None:
         return jsonify({'error': 'not found'})
-    job = db_sess.query(Jobs).filter(Jobs.id == id).first()
-    db_sess.delete(job)
-    db_sess.commit()
-    return jsonify({'success': 'OK'})
+    try:
+        job = db_sess.query(Jobs).filter(Jobs.id == id).first()
+        db_sess.delete(job)
+        db_sess.commit()
+        return jsonify({'success': 'OK'})
+    except Exception as e:
+        return jsonify({'error': 'Bad request'})
 
 
 @blueprint.route('/api/jobs')
