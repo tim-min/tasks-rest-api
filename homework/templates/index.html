@@ -1,0 +1,29 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div align="center">
+    <h1>Works Log</h1>
+        <tbody>
+            {% for job in jobs %}
+            <br>
+            <h3 style="float: left;">Action #{{ loop.index }}</h3>
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Title of activity</th>
+                    <th scope="col">Team leader</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">List of collaborators</th>
+                    <th scope="col">Is finished</th>
+                  </tr>
+                </thead>
+            <tr>
+                {% for value in job %}
+                <td> {{ value }} </td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+            {% endfor %}
+</div>
+{% endblock %}
