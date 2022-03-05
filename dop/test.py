@@ -19,14 +19,14 @@ print(get('http://localhost:5000/api/users').json())
 
 print("Добавление нового пользователя:")
 print(post('http://localhost:5000/api/users',
-           json={'id': '55',
+           json={'id': 5567,
                  'name': 'name55',
                  'surname': 'surname55',
                  'age': 26,
                  'position': 'position55',
                  'speciality': 'speciality55',
                  'address': 'module_55',
-                 'email': 'email@gmail.com'}).json())
+                 'email': 'emaillljk@gmail.com'}).json())
 
 print("Все пользователи:")
 print(get('http://localhost:5000/api/users').json())
