@@ -26,7 +26,7 @@ def delete_job(id):
 
 
 @blueprint.route('/api/jobs')
-def get_news():
+def get_jobs():
     db_sess = db_session.create_session()
     news = db_sess.query(Jobs).all()
     return jsonify(
@@ -40,7 +40,7 @@ def get_news():
 
 
 @blueprint.route('/api/jobs/<job_id>', methods=['GET'])
-def get_one_news(job_id):
+def get_one_job(job_id):
     if not job_id.isdigit():
         return jsonify({'error': 'Bad request'})
     db_sess = db_session.create_session()
@@ -56,7 +56,7 @@ def get_one_news(job_id):
 
 
 @blueprint.route('/api/jobs', methods=['POST'])
-def create_news():
+def create_job():
     if not request.json:
         return jsonify({'error': 'Empty request'})
     elif not all(key in request.json for key in
@@ -79,5 +79,37 @@ def create_news():
         db_sess.add(jobs)
         db_sess.commit()
         return jsonify({'success': 'OK'})
+    except Exception as e:
+        return jsonify({'error': 'Bad request'})
+
+
+@blueprint.route('/api/jobs/edit', methods=['POST'])
+def edit_job():
+    if not request.json:
+        return jsonify({'error': 'Empty request'})
+    elif 'id' not in request.json:
+        return jsonify({'error': 'Bad request'})
+    db_sess = db_session.create_session()
+    if db_sess.query(Jobs.id).filter_by(id=request.json['id']).scalar() is None:
+        return jsonify({'error': 'Not found'})
+
+    try:
+        for job in db_sess.query(Jobs).all():
+            if request.json.get('team_leader'):
+                job.team_leader = request.json['team_leader']
+            if request.json.get('job'):
+                job.job = request.json['job']
+            if request.json.get('work_size'):
+                job.work_size = request.json['work_size']
+            if request.json.get('collaborators'):
+                job.collaborators = request.json['collaborators']
+            if request.json.get('start_date'):
+                job.start_date = request.json['start_date']
+            if request.json.get('end_date'):
+                job.end_date = request.json['end_date']
+            if request.json.get('is_finished'):
+                job.is_finished = request.json['is_finished']
+        db_sess.commit()
+        return jsonify({'success': 'ok'})
     except Exception as e:
         return jsonify({'error': 'Bad request'})
